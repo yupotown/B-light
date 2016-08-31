@@ -1,5 +1,7 @@
 ﻿
-# include <Siv3D.hpp>
+#include "Light2D.h"
+#include <Siv3D.hpp>
+#include "LightSource.h"
 
 struct Wall {
 	Line line;
@@ -9,6 +11,16 @@ struct Wall {
 void Main()
 {
 	Graphics::SetBackground(Color(0, 0, 0));
+
+	// 光
+	Light2D light(640, 480, 4);
+
+	// 光源
+	light.srcs = std::vector<LightSource>{
+		LightSource(R, { 320, 10 }, PiF / 2, PiF / 3, 0.8f, 0.998f, 400),
+		LightSource(G, { 120, 10 }, PiF / 4, PiF / 3, 0.8f, 0.998f, 400),
+		LightSource(B, { 520, 10 }, PiF * 3 / 4, PiF / 3, 0.8f, 0.998f, 400),
+	};
 
 	// 重力加速度
 	Vec2 gravity(0, 0.1);
@@ -82,6 +94,18 @@ void Main()
 				v = v.dot(fv) / fv.lengthSq() * fv * (it->floor ? (!walking ? fricFloor : fric) : 1);
 			}
 		}
+
+		// 光
+		light.update(R);
+		light.update(G);
+		light.update(B);
+
+		// 光の描画
+		Graphics2D::SetBlendState(BlendState::Additive);
+		for (int i = 0; i < 3; ++i) {
+			light.tex[i].resize(640, 480).draw();
+		}
+		Graphics2D::SetBlendState(BlendState::Default);
 
 		// 床や壁の描画
 		for (auto flr : walls) {
