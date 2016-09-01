@@ -17,10 +17,13 @@ void Main()
 
 	// 光源
 	light.srcs = std::vector<LightSource>{
-		LightSource(R, { 320, 10 }, PiF / 2, PiF / 3, 0.8f, 0.998f, 400),
-		LightSource(G, { 120, 10 }, PiF / 4, PiF / 3, 0.8f, 0.998f, 400),
-		LightSource(B, { 520, 10 }, PiF * 3 / 4, PiF / 3, 0.8f, 0.998f, 400),
+		LightSource(B, { 0, 0 }, 0, PiF / 60, 1.0f, 0.999f, 1000), // 操作する光源
+		LightSource(R, { 320, 10 }, PiF / 2, PiF / 3, 0.8f, 0.998f, 600),
+		LightSource(G, { 120, 10 }, PiF / 4, PiF / 3, 0.8f, 0.998f, 600),
+		LightSource(B, { 520, 10 }, PiF * 3 / 4, PiF / 3, 0.8f, 0.998f, 600),
+		LightSource(R, { 320, 240 }, 0.0f, PiF / 12, 1.0f, 0.999f, 600),
 	};
+	LightSource &flashlight = light.srcs[0];
 
 	// 重力加速度
 	Vec2 gravity(0, 0.1);
@@ -40,6 +43,18 @@ void Main()
 		{ Line(600, 460, 640, 320), false },
 	};
 
+	// 鏡
+	for (auto it = walls.begin(); it != walls.end(); ++it) {
+		int x1, y1, x2, y2;
+		light.toImgPos(it->line.begin.x, it->line.begin.y, x1, y1);
+		light.toImgPos(it->line.end.x, it->line.end.y, x2, y2);
+		cv::Point p1(x1, y1), p2(x2, y2);
+		const float vx = y2 - y1, vy = x1 - x2;
+		const float n = Sqrt(vx * vx + vy * vy);
+		cv::line(light.maskMir, p1, p2, cv::Scalar(255), 2, 8);
+		cv::line(light.vecMir, p1, p2, cv::Scalar(vx / n, vy / n), 2, 8);
+	}
+
 	// 主人公の位置と大きさ
 	Circle me(330, 400, 9);
 
@@ -53,6 +68,9 @@ void Main()
 
 	while (System::Update())
 	{
+		// マウス
+		const Point mouse = Mouse::Pos();
+
 		// 乗っている床の向き
 		const Vec2 fov = onFloor ? floorOn->line.vector().normalized() : Vec2(1, 0);
 
@@ -95,10 +113,16 @@ void Main()
 			}
 		}
 
+		// フラッシュライト
+		flashlight.pos = me.center.asPoint();
+		flashlight.angle = Atan2(mouse.y - me.center.y, mouse.x - me.center.x);
+		flashlight.st = Random(0.85f, 0.99f);
+
 		// 光
 		light.update(R);
 		light.update(G);
 		light.update(B);
+		light.srcs[4].angle += PiF / 180;
 
 		// 光の描画
 		Graphics2D::SetBlendState(BlendState::Additive);
@@ -109,7 +133,7 @@ void Main()
 
 		// 床や壁の描画
 		for (auto flr : walls) {
-			flr.line.draw(Palette::White);
+			flr.line.draw(Color(255, 255, 255, int(128 * Abs(Cos(light.srcs[4].angle)))));
 		}
 
 		// 主人公の描画

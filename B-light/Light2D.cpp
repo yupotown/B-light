@@ -14,7 +14,7 @@ Light2D::Light2D(int screenW, int screenH, int imgRate)
 	}
 	new(&air) cv::Mat(imgh, imgw, CV_8UC1, cv::Scalar(255));
 	new(&maskMir) cv::Mat(imgh, imgw, CV_8UC1, cv::Scalar(0));
-	new(&vecMir) cv::Mat(imgh, imgw, CV_8UC2, cv::Scalar(0, 0));
+	new(&vecMir) cv::Mat(imgh, imgw, CV_32FC2, cv::Scalar(0, 0));
 }
 
 void Light2D::update(PColor col)
@@ -77,7 +77,24 @@ void Light2D::update(PColor col)
 				// 強さを更新
 				st *= att * air.data[ny * imgw + nx] / 255;
 
-				// TODO: 鏡
+				// 鏡
+				if (maskMir.data[ny * imgw + nx] != 0) {
+
+					// 強さを更新
+					st *= maskMir.data[ny * imgw + nx] / 255.0f;
+
+					// 法線
+					const float * const vd = reinterpret_cast<const float *>(vecMir.data);
+					const float vx = vd[(ny * imgw + nx) * 2], vy = vd[(ny * imgw + nx) * 2 + 1];
+
+					// 鏡の向いている方向から光が来ていたら反射
+					const float c = dx * vx + dy * vy, s = dx * vy - dy * vx;
+					if (c < 0) {
+						const float temp = (s * s - c * c) * dx + 2 * s * c * dy;
+						dy = -2 * s * c * dx + (s * s - c * c) * dy;
+						dx = temp;
+					}
+				}
 
 				// 直前の位置を更新
 				pnx = nx; pny = ny;
@@ -100,4 +117,36 @@ void Light2D::update(PColor col)
 
 	// テクスチャに変換
 	tex[col].fill(img[col]);
+}
+
+int Light2D::toImgX(int x) const
+{
+	return x / rate;
+}
+
+int Light2D::toImgY(int y) const
+{
+	return y / rate;
+}
+
+void Light2D::toImgPos(int x, int y, int & outX, int & outY) const
+{
+	outX = toImgX(x);
+	outY = toImgY(y);
+}
+
+int Light2D::toScreenX(int x) const
+{
+	return x * rate;
+}
+
+int Light2D::toScreenY(int y) const
+{
+	return y * rate;
+}
+
+void Light2D::toScreenPos(int x, int y, int & outX, int & outY) const
+{
+	outX = toScreenX(x);
+	outY = toScreenY(y);
 }

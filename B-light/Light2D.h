@@ -9,7 +9,40 @@ struct Light2D {
 
 	Light2D(int screenW, int screenH, int imgRate);
 
+	/// <summary>
+	/// 1色のテクスチャを更新する。
+	/// </summary>
 	void update(PColor col);
+
+	/// <summary>
+	/// 画面の座標を計算用空間の座標に変換する。
+	/// </summary>
+	int toImgX(int x) const;
+
+	/// <summary>
+	/// 画面の座標を計算用空間の座標に変換する。
+	/// </summary>
+	int toImgY(int y) const;
+
+	/// <summary>
+	/// 画面の座標を計算用空間の座標に変換する。
+	/// </summary>
+	void toImgPos(int x, int y, int &outX, int &outY) const;
+
+	/// <summary>
+	/// 計算用空間の座標から対応する画面の範囲の左上の座標を計算する。
+	/// </summary>
+	int toScreenX(int x) const;
+
+	/// <summary>
+	/// 計算用空間の座標から対応する画面の範囲の左上の座標を計算する。
+	/// </summary>
+	int toScreenY(int y) const;
+
+	/// <summary>
+	/// 計算用空間の座標から対応する画面の範囲の左上の座標を計算する。
+	/// </summary>
+	void toScreenPos(int x, int y, int &outX, int &outY) const;
 
 	/// <summary>
 	/// 画面の幅
