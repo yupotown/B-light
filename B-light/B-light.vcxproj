@@ -170,6 +170,7 @@
     <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="data\img\empty.png" />
     <Image Include="Engine\Splash.png" />
     <Image Include="Icon.ico" />
   </ItemGroup>

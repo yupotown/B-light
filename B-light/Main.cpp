@@ -66,6 +66,10 @@ void Main()
 	bool onFloor = false, walking = false;
 	std::list<Wall>::iterator floorOn;
 
+	// 背景画像
+	Image imgBk(L"data/img/empty.png");
+	Texture texBk(imgBk);
+
 	while (System::Update())
 	{
 		// マウス
@@ -123,6 +127,9 @@ void Main()
 		light.update(G);
 		light.update(B);
 		light.srcs[4].angle += PiF / 180;
+
+		// 背景の描画
+		texBk.draw();
 
 		// 光の描画
 		Graphics2D::SetBlendState(BlendState::Additive);

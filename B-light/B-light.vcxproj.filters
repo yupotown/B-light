@@ -67,6 +67,12 @@
     <Filter Include="リソース ファイル\Engine\dll%28x86%29\TobiiEyeX">
       <UniqueIdentifier>{a079701e-3fb0-45fa-b67d-4de7e67d8a5c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{313fb215-b9ba-4ef5-9f9a-e6a855ecd107}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\img">
+      <UniqueIdentifier>{3c6a529f-2486-4035-bf62-c883dbcc345e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -90,6 +96,9 @@
     </Image>
     <Image Include="Engine\Splash.png">
       <Filter>リソース ファイル\Engine</Filter>
+    </Image>
+    <Image Include="data\img\empty.png">
+      <Filter>data\img</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
