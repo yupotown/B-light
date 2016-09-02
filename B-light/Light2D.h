@@ -1,5 +1,7 @@
 #pragma once
 
+#pragma warning(disable: 4819)
+
 #include <opencv2/opencv.hpp>
 #include <Siv3D.hpp>
 #include <vector>

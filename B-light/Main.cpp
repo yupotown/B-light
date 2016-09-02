@@ -46,10 +46,10 @@ void Main()
 	// 鏡
 	for (auto it = walls.begin(); it != walls.end(); ++it) {
 		int x1, y1, x2, y2;
-		light.toImgPos(it->line.begin.x, it->line.begin.y, x1, y1);
-		light.toImgPos(it->line.end.x, it->line.end.y, x2, y2);
+		light.toImgPos(int(it->line.begin.x), int(it->line.begin.y), x1, y1);
+		light.toImgPos(int(it->line.end.x), int(it->line.end.y), x2, y2);
 		cv::Point p1(x1, y1), p2(x2, y2);
-		const float vx = y2 - y1, vy = x1 - x2;
+		const float vx = float(y2 - y1), vy = float(x1 - x2);
 		const float n = Sqrt(vx * vx + vy * vy);
 		cv::line(light.maskMir, p1, p2, cv::Scalar(255), 2, 8);
 		cv::line(light.vecMir, p1, p2, cv::Scalar(vx / n, vy / n), 2, 8);
@@ -115,7 +115,7 @@ void Main()
 
 		// フラッシュライト
 		flashlight.pos = me.center.asPoint();
-		flashlight.angle = Atan2(mouse.y - me.center.y, mouse.x - me.center.x);
+		flashlight.angle = Atan2(mouse.y - float(me.center.y), mouse.x - float(me.center.x));
 		flashlight.st = Random(0.85f, 0.99f);
 
 		// 光

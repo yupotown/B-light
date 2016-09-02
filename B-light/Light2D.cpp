@@ -46,7 +46,7 @@ void Light2D::update(PColor col)
 			float dx = Cos(angle), dy = Sin(angle);
 
 			// 位置を計算用空間のものに変換
-			float x = src.pos.x / rate, y = src.pos.y / rate;
+			float x = float(src.pos.x) / rate, y = float(src.pos.y) / rate;
 
 			// 強さ
 			float st = src.st;
@@ -70,9 +70,9 @@ void Light2D::update(PColor col)
 				if (nx == pnx && ny == pny) continue;
 
 				// 計算用画像を更新
-				int temp = matLt[col].data[ny * imgw + nx] + st * 255;
+				int temp = int(matLt[col].data[ny * imgw + nx] + st * 255);
 				if (temp > 255) temp = 255;
-				matLt[col].data[ny * imgw + nx] = temp;
+				matLt[col].data[ny * imgw + nx] = uchar(temp);
 
 				// 強さを更新
 				st *= att * air.data[ny * imgw + nx] / 255;
@@ -90,9 +90,9 @@ void Light2D::update(PColor col)
 					// 鏡の向いている方向から光が来ていたら反射
 					const float c = dx * vx + dy * vy, s = dx * vy - dy * vx;
 					if (c < 0) {
-						const float temp = (s * s - c * c) * dx + 2 * s * c * dy;
+						const float tempDx = (s * s - c * c) * dx + 2 * s * c * dy;
 						dy = -2 * s * c * dx + (s * s - c * c) * dy;
-						dx = temp;
+						dx = tempDx;
 					}
 				}
 
