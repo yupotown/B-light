@@ -131,13 +131,6 @@ void Main()
 		// 背景の描画
 		texBk.draw();
 
-		// 光の描画
-		Graphics2D::SetBlendState(BlendState::Additive);
-		for (int i = 0; i < 3; ++i) {
-			light.tex[i].resize(640, 480).draw();
-		}
-		Graphics2D::SetBlendState(BlendState::Default);
-
 		// 床や壁の描画
 		for (auto flr : walls) {
 			flr.line.draw(Color(255, 255, 255, int(128 * Abs(Cos(light.srcs[4].angle)))));
@@ -145,5 +138,12 @@ void Main()
 
 		// 主人公の描画
 		me.draw(Palette::Red);
+
+		// 光の描画
+		Graphics2D::SetBlendState(BlendState::Additive);
+		for (int i = 0; i < 3; ++i) {
+			light.tex[i].resize(640, 480).draw();
+		}
+		Graphics2D::SetBlendState(BlendState::Default);
 	}
 }
