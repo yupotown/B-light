@@ -162,6 +162,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BGMInfo.cpp" />
+    <ClCompile Include="BGMPlayer.cpp" />
     <ClCompile Include="Light2D.cpp" />
     <ClCompile Include="LightSource.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -243,6 +245,8 @@
     <Text Include="Engine\LogMessages.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BGMInfo.h" />
+    <ClInclude Include="BGMPlayer.h" />
     <ClInclude Include="Light2D.h" />
     <ClInclude Include="LightSource.h" />
     <ClInclude Include="PColor.h" />

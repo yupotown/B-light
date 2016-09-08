@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<sound>
+  <file>orange.mp3</file>
+  <loop>
+    <begin>24255</begin>
+    <end>729855</end>
+  </loop>
+</sound>

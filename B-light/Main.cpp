@@ -1,5 +1,6 @@
 ﻿
 #include "Light2D.h"
+#include "BGMPlayer.h"
 #include <Siv3D.hpp>
 #include "LightSource.h"
 
@@ -11,6 +12,10 @@ struct Wall {
 void Main()
 {
 	Graphics::SetBackground(Color(0, 0, 0));
+
+	// BGM
+	BGMPlayer bgm;
+	bgm.loadRecursive(L"08");
 
 	// 光
 	Light2D light(640, 480, 4);
@@ -69,6 +74,9 @@ void Main()
 	// 背景画像
 	Image imgBk(L"data/img/empty.png");
 	Texture texBk(imgBk);
+
+	// BGM 再生開始
+	bgm.play(L"08");
 
 	while (System::Update())
 	{
@@ -145,5 +153,13 @@ void Main()
 			light.tex[i].resize(640, 480).draw();
 		}
 		Graphics2D::SetBlendState(BlendState::Default);
+
+		// クリックしたら BGM を変更
+		if (Input::MouseL.clicked) {
+			bgm.play(L"orange");
+		}
+
+		// BGM
+		bgm.update();
 	}
 }
